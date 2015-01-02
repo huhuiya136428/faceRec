@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.pdb
 
 # Precompiled Headers
 *.gch
@@ -73,3 +74,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+build/
+x64/
+dump/
+Debug/
+Release/
+GeneratedFiles/
+*.suo
+*.sdf
+*.opensdf
