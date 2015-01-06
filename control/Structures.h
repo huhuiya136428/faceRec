@@ -58,6 +58,14 @@ struct ImageProcessingFlags{
     bool erodeOn;
     bool flipOn;
     bool cannyOn;
+    bool faceRegisterOn;
+    bool showListOn;
+   
+    ImageProcessingFlags():faceRegisterOn(false), showListOn(false)
+    {
+
+    };
+
 };
 
 struct MouseData{

@@ -11,7 +11,9 @@ endif(NOT USE_SYSTEM_LIBS)
 #-------------------------------------------------------------------------------
 # main
 add_library(algorithm
-   
+   fzhDefines.hpp
+   facedetect.hpp
+   facedetect.cpp
    )
 
 target_link_libraries(algorithm libopentld cvblobs config++ ${OpenCV_LIBS})

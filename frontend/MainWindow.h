@@ -50,25 +50,31 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    public:
-        explicit MainWindow(QWidget *parent = 0);
-        ~MainWindow();
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
-    private:
-        Ui::MainWindow *ui;
-        QPushButton *connectToCameraButton;
-        QMap<int, int> deviceNumberMap;
-        QMap<int, CameraView*> cameraViewMap;
-        SharedImageBuffer *sharedImageBuffer;
-        bool removeFromMapByTabIndex(QMap<int, int>& map, int tabIndex);
-        void updateMapValues(QMap<int, int>& map, int tabIndex);
-        void setTabCloseToolTips(QTabWidget *tabs, QString tooltip);
+private:
+    Ui::MainWindow *ui;
+    QPushButton *connectToCameraButton;
+    QMap<int, int> deviceNumberMap;
+    QMap<int, CameraView*> cameraViewMap;
+    SharedImageBuffer *sharedImageBuffer;
+    bool removeFromMapByTabIndex(QMap<int, int>& map, int tabIndex);
+    void updateMapValues(QMap<int, int>& map, int tabIndex);
+    void setTabCloseToolTips(QTabWidget *tabs, QString tooltip);
 
-    public slots:
-        void connectToCamera();
-        void disconnectCamera(int index);
-        void showAboutDialog();
-        void setFullScreen(bool);
+public slots:
+    void connectToCamera();
+    void disconnectCamera(int index);
+    void showAboutDialog();
+    void setFullScreen(bool);
+    void registerFace();
+    void showFaceList();
+private:
+    QToolBar* imageProcessingActions_;
+    QAction* registerFaceAct_;
+    QAction* showFaceListAct_;
 };
 
 #endif // MAINWINDOW_H

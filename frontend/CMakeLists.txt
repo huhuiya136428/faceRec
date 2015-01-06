@@ -45,8 +45,6 @@ set(INCLUDE_FILES
 	MainWindow.h	
 	)
 
-	
-
 
 #add_library(frontend ${INCLUDE_FILES} ${SOURCE_FILES} ${UI_FILES})
 source_group("Header Files" FILES ${INCLUDE_FILES})
@@ -57,14 +55,17 @@ source_group("Source Files" FILES ${SOURCE_FILES})
 #add_library(frontend ${UI_FILES})
 source_group("UI forms" FILES ${UI_FILES})
    
+set(ICONS 
+./resources/icon.qrc
+)
+
 
 #-------------------------------------------------------------------------------
 # opentld
 add_executable(frontend
-    ${INCLUDE_FILES} ${SOURCE_FILES} ${UI_FILES})
+    ${INCLUDE_FILES} ${SOURCE_FILES} ${UI_FILES} ${ICONS})
 	
-target_link_libraries(frontend libopentld cvblobs config++ control Qt5::Core Qt5::Widgets Qt5::Gui ${OpenCV_LIBS})
-
+target_link_libraries(frontend libopentld cvblobs config++ control algorithm Qt5::Core Qt5::Widgets Qt5::Gui ${OpenCV_LIBS})
 
 #install(TARGETS faceRec DESTINATION bin)
 

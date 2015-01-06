@@ -64,6 +64,8 @@ CameraView::CameraView(QWidget *parent, int deviceNumber, SharedImageBuffer *sha
     imageProcessingFlags.erodeOn=false;
     imageProcessingFlags.flipOn=false;
     imageProcessingFlags.cannyOn=false;
+    imageProcessingFlags.faceRegisterOn = false;
+    imageProcessingFlags.showListOn = false;
     // Connect signals/slots
     connect(ui->frameLabel, SIGNAL(onMouseMoveEvent()), this, SLOT(updateMouseCursorPosLabel()));
     connect(ui->clearImageBufferButton, SIGNAL(released()), this, SLOT(clearImageBuffer()));
@@ -338,6 +340,8 @@ void CameraView::newMouseData(struct MouseData mouseData)
 
 void CameraView::handleContextMenuAction(QAction *action)
 {
+    QString name = action->text();
+
     if(action->text()=="Reset ROI")
         emit setROI(QRect(0, 0, captureThread->getInputSourceWidth(), captureThread->getInputSourceHeight()));
     else if(action->text()=="Scale to Fit Frame")
@@ -370,6 +374,16 @@ void CameraView::handleContextMenuAction(QAction *action)
     else if(action->text()=="Canny")
     {
         imageProcessingFlags.cannyOn=action->isChecked();
+        emit newImageProcessingFlags(imageProcessingFlags);
+    }
+    else if (action->text() == "Reg")
+    {
+        imageProcessingFlags.faceRegisterOn = action->isChecked();
+        emit newImageProcessingFlags(imageProcessingFlags);
+    }
+    else if (action->text() == "List")
+    {
+        imageProcessingFlags.showListOn = action->isChecked();
         emit newImageProcessingFlags(imageProcessingFlags);
     }
     else if(action->text()=="Settings...")

@@ -30,6 +30,8 @@
 /*                                                                      */
 /************************************************************************/
 
+#include "../core/algorithm/facedetect.hpp"
+
 #include "ProcessingThread.h"
 
 ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber) : QThread(), sharedImageBuffer(sharedImageBuffer)
@@ -144,6 +146,18 @@ void ProcessingThread::run()
                   imgProcSettings.cannyThreshold1, imgProcSettings.cannyThreshold2,
                   imgProcSettings.cannyApertureSize, imgProcSettings.cannyL2gradient);
         }
+        // Canny edge detection
+        if (imgProcFlags.faceRegisterOn)
+        {
+            fzhcore::detectAndDraw(currentFrame);
+          /*  static num = 0;
+
+            do the face rec;
+
+            num % 60;
+
+            emit doneOneFrame(int num of frame processed); so that others can turn off the flag and update the progress bar*/
+        }
         ////////////////////////////////////
         // PERFORM IMAGE PROCESSING ABOVE //
         ////////////////////////////////////
@@ -178,6 +192,7 @@ void ProcessingThread::updateFPS(int timeElapsed)
     if(fps.size()>PROCESSING_FPS_STAT_QUEUE_LENGTH)
         fps.dequeue();
 
+
     // Update FPS value every DEFAULT_PROCESSING_FPS_STAT_QUEUE_LENGTH samples
     if((fps.size()==PROCESSING_FPS_STAT_QUEUE_LENGTH)&&(sampleNumber==PROCESSING_FPS_STAT_QUEUE_LENGTH))
     {
@@ -208,6 +223,8 @@ void ProcessingThread::updateImageProcessingFlags(struct ImageProcessingFlags im
     this->imgProcFlags.erodeOn=imgProcFlags.erodeOn;
     this->imgProcFlags.flipOn=imgProcFlags.flipOn;
     this->imgProcFlags.cannyOn=imgProcFlags.cannyOn;
+    this->imgProcFlags.faceRegisterOn = imgProcFlags.faceRegisterOn;
+    this->imgProcFlags.showListOn = imgProcFlags.showListOn;
 }
 
 void ProcessingThread::updateImageProcessingSettings(struct ImageProcessingSettings imgProcSettings)

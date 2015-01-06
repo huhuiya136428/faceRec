@@ -12,6 +12,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 set(Qt5_DIR "D:\\development\\Qt\\5.3\\msvc2013_64\\")
 set(CMAKE_PREFIX_PATH ${Qt5_DIR})

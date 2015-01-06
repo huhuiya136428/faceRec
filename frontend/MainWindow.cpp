@@ -35,10 +35,13 @@
 // Qt
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QToolBar>
+#include <QActionGroup>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    imageProcessingActions_(nullptr)
 {
     // Setup UI
     ui->setupUi(this);
@@ -48,7 +51,26 @@ MainWindow::MainWindow(QWidget *parent) :
     newTab->setAlignment(Qt::AlignCenter);
     ui->tabWidget->addTab(newTab, "");
     ui->tabWidget->setTabsClosable(false);    
-   
+    ui->tabWidget->tabBar()->hide();
+    
+    imageProcessingActions_ = addToolBar(tr("Register"));
+
+    QActionGroup *anActionGroup = new QActionGroup(imageProcessingActions_);
+    anActionGroup->setExclusive(false);
+
+    registerFaceAct_ = new QAction(QIcon(":/reg.png"), tr("Reg"), anActionGroup);
+    registerFaceAct_->setCheckable(true);
+    connect(registerFaceAct_, SIGNAL(triggered()), this, SLOT(registerFace()));
+
+    showFaceListAct_ = new QAction(QIcon(":/list.png"), tr("List"), anActionGroup);
+    showFaceListAct_->setCheckable(true);
+    connect(showFaceListAct_, SIGNAL(triggered()), this, SLOT(showFaceList()));
+    
+    imageProcessingActions_->addAction(registerFaceAct_);
+    imageProcessingActions_->addSeparator();
+    imageProcessingActions_->addAction(showFaceListAct_);
+    imageProcessingActions_->addSeparator();
+ 
     // Connect other signals/slots
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(showAboutDialog()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
@@ -263,4 +285,14 @@ void MainWindow::setFullScreen(bool input)
         this->showFullScreen();
     else
         this->showNormal();
+}
+
+void MainWindow::registerFace()
+{
+    cameraViewMap[0]->handleContextMenuAction(registerFaceAct_);
+}
+
+void MainWindow::showFaceList()
+{
+    cameraViewMap[0]->handleContextMenuAction(showFaceListAct_);
 }
