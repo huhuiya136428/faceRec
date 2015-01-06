@@ -69,8 +69,7 @@ public slots:
     void disconnectCamera(int index);
     void showAboutDialog();
     void setFullScreen(bool);
-    void registerFace();
-    void showFaceList();
+    void toolbarActions(QAction* qAction);
 private:
     QToolBar* imageProcessingActions_;
     QAction* registerFaceAct_;

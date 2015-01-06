@@ -60,11 +60,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     registerFaceAct_ = new QAction(QIcon(":/reg.png"), tr("Reg"), anActionGroup);
     registerFaceAct_->setCheckable(true);
-    connect(registerFaceAct_, SIGNAL(triggered()), this, SLOT(registerFace()));
 
     showFaceListAct_ = new QAction(QIcon(":/list.png"), tr("List"), anActionGroup);
     showFaceListAct_->setCheckable(true);
-    connect(showFaceListAct_, SIGNAL(triggered()), this, SLOT(showFaceList()));
+   
+    connect(anActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(toolbarActions(QAction*)));
     
     imageProcessingActions_->addAction(registerFaceAct_);
     imageProcessingActions_->addSeparator();
@@ -287,12 +287,7 @@ void MainWindow::setFullScreen(bool input)
         this->showNormal();
 }
 
-void MainWindow::registerFace()
+void MainWindow::toolbarActions(QAction* qAction)
 {
-    cameraViewMap[0]->handleContextMenuAction(registerFaceAct_);
-}
-
-void MainWindow::showFaceList()
-{
-    cameraViewMap[0]->handleContextMenuAction(showFaceListAct_);
+    cameraViewMap[0]->handleContextMenuAction(qAction);
 }
