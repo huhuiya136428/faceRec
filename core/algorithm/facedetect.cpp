@@ -1,11 +1,3 @@
-#include "opencv2/objdetect.hpp"
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/videoio.hpp"
-
-#include "opencv2/imgproc.hpp"
-#include "opencv2/core/utility.hpp"
-
-#include "opencv2/videoio/videoio_c.h"
 
 #include <cctype>
 #include <iostream>
@@ -17,14 +9,34 @@
 
 namespace fzhcore
 {
-    void detectAndDraw_(cv::Mat& img, cv::CascadeClassifier& cascade,
-        cv::CascadeClassifier& nestedCascade,
-        double scale, bool tryflip);
+    const std::string FaceRecogniser::cascadeName_ = fzhcore::HARR_MODEL;
+    const std::string FaceRecogniser::nestedCascadeName_ = fzhcore::HARR_NESTED_MODEL;
+    const size_t FaceRecogniser::maxCaptured_ = 20;
 
-    const static std::string cascadeName = fzhcore::HARR_MODEL;
-    const static std::string nestedCascadeName = fzhcore::HARR_NESTED_MODEL;
+    FaceRecogniser::FaceRecogniser()
+        :numCaptured_(0)
+    {
 
-    int detectAndDraw(cv::Mat& img)
+    }
+
+    FaceRecogniser::~FaceRecogniser()
+    {
+        numCaptured_ = 0;
+    }
+
+    bool FaceRecogniser::isFinished() 
+    {
+        bool isFinished = (numCaptured_ >= maxCaptured_);
+
+        if ( isFinished)
+        {
+            numCaptured_ = 0;
+        }      
+        
+        return isFinished;
+    }
+
+    bool FaceRecogniser::detectAndDraw(cv::Mat& img)
     {
         cv::Mat frame, frameCopy, image;
         const std::string scaleOpt = "--scale=";
@@ -41,19 +53,17 @@ namespace fzhcore
         cv::CascadeClassifier cascade, nestedCascade;
         double scale = 1;
 
-        if (!cascade.load(cascadeName))
+        if (!cascade.load(cascadeName_))
         {
             std::cerr << "ERROR: Could not load classifier cascade" << std::endl;
 
-            return -1;
+            return false;
         }
         
-        detectAndDraw_(img, cascade, nestedCascade, scale, tryflip);
-
-        return 0;
+        return detectAndDraw_(img, cascade, nestedCascade, scale, tryflip);
     }
 
-    void detectAndDraw_(cv::Mat& img, cv::CascadeClassifier& cascade,
+    bool FaceRecogniser::detectAndDraw_(cv::Mat& img, cv::CascadeClassifier& cascade,
         cv::CascadeClassifier& nestedCascade,
         double scale, bool tryflip)
     {
@@ -124,5 +134,19 @@ namespace fzhcore
                 cv::circle(img, center, radius, color, 3, 8, 0);
             }
         }
+
+        bool foundFace = !faces.empty();
+        if (foundFace)
+        {
+            ++numCaptured_;
+        }
+
+        return foundFace;
     }
+
+    int FaceRecogniser::getNumCapture() const
+    {
+        return numCaptured_;
+    }
+
 }

@@ -76,10 +76,13 @@ class CameraView : public QWidget
         void updateProcessingThreadStats(struct ThreadStatisticsData statData);
         void updateCaptureThreadStats(struct ThreadStatisticsData statData);
         
-
+        void updateProgressBar(int );
+        void finishRegistration();
     signals:
         void newImageProcessingFlags(struct ImageProcessingFlags imageProcessingFlags);
         void setROI(QRect roi);
+        void RegistrationFinished();
+     
 };
 
 #endif // CAMERAVIEW_H

@@ -146,17 +146,11 @@ void ProcessingThread::run()
                   imgProcSettings.cannyThreshold1, imgProcSettings.cannyThreshold2,
                   imgProcSettings.cannyApertureSize, imgProcSettings.cannyL2gradient);
         }
-        // Canny edge detection
+        static fzhcore::FaceRecogniser faceRec;
+        bool found = false;
         if (imgProcFlags.faceRegisterOn)
-        {
-            fzhcore::detectAndDraw(currentFrame);
-          /*  static num = 0;
-
-            do the face rec;
-
-            num % 60;
-
-            emit doneOneFrame(int num of frame processed); so that others can turn off the flag and update the progress bar*/
+        {   
+            found = faceRec.detectAndDraw(currentFrame);      
         }
         ////////////////////////////////////
         // PERFORM IMAGE PROCESSING ABOVE //
@@ -168,6 +162,12 @@ void ProcessingThread::run()
 
         // Inform GUI thread of new frame (QImage)
         emit newFrame(frame);
+
+        if (found)
+            emit foundFace(100 * faceRec.getNumCapture() / faceRec.maxCaptured_);
+
+        if (faceRec.isFinished())
+            emit finishRegister();
 
         // Update statistics
         updateFPS(processingTime);

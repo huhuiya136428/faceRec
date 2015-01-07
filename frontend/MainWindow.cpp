@@ -116,7 +116,7 @@ void MainWindow::connectToCamera()
                 sharedImageBuffer->add(deviceNumber, imageBuffer, ui->actionSynchronizeStreams->isChecked());
                 // Create CameraView
                 cameraViewMap[deviceNumber] = new CameraView(ui->tabWidget, deviceNumber, sharedImageBuffer);
-
+                connect(cameraViewMap[deviceNumber], SIGNAL(RegistrationFinished()), this, SLOT(resetRegister()));
                 // Check if stream synchronization is enabled
                 if(ui->actionSynchronizeStreams->isChecked())
                 {
@@ -290,4 +290,9 @@ void MainWindow::setFullScreen(bool input)
 void MainWindow::toolbarActions(QAction* qAction)
 {
     cameraViewMap[0]->handleContextMenuAction(qAction);
+}
+
+void MainWindow::resetRegister()
+{
+    registerFaceAct_->setChecked(false);
 }

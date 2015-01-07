@@ -94,6 +94,8 @@ class ProcessingThread : public QThread
     signals:
         void newFrame(const QImage &frame);
         void updateStatisticsInGUI(struct ThreadStatisticsData);
+        void foundFace(int);
+        void finishRegister();
 };
 
 #endif // PROCESSINGTHREAD_H

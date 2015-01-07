@@ -122,6 +122,10 @@ bool CameraView::connectToCamera(bool dropFrameIfBufferFull, int capThreadPrio, 
         connect(processingThread, SIGNAL(newFrame(QImage)), this, SLOT(updateFrame(QImage)));
         connect(processingThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateProcessingThreadStats(struct ThreadStatisticsData)));
         connect(captureThread, SIGNAL(updateStatisticsInGUI(struct ThreadStatisticsData)), this, SLOT(updateCaptureThreadStats(struct ThreadStatisticsData)));
+
+        connect(processingThread, SIGNAL(foundFace(int)), this, SLOT(updateProgressBar(int)));
+        connect(processingThread, SIGNAL(finishRegister()), this, SLOT(finishRegistration()));
+
         connect(imageProcessingSettingsDialog, SIGNAL(newImageProcessingSettings(struct ImageProcessingSettings)), processingThread, SLOT(updateImageProcessingSettings(struct ImageProcessingSettings)));
         connect(this, SIGNAL(newImageProcessingFlags(struct ImageProcessingFlags)), processingThread, SLOT(updateImageProcessingFlags(struct ImageProcessingFlags)));
         connect(this, SIGNAL(setROI(QRect)), processingThread, SLOT(setROI(QRect)));
@@ -388,4 +392,21 @@ void CameraView::handleContextMenuAction(QAction *action)
     }
     else if(action->text()=="Settings...")
         setImageProcessingSettings();
+}
+
+void CameraView::updateProgressBar(int sizeT)
+{
+    if (imageProcessingFlags.faceRegisterOn)
+    {
+        ui->progressBar->setValue(sizeT);
+    }    
+}
+
+void CameraView::finishRegistration()
+{
+    ui->progressBar->setValue(0);
+
+    imageProcessingFlags.faceRegisterOn = false;
+    emit newImageProcessingFlags(imageProcessingFlags);
+    emit RegistrationFinished();
 }

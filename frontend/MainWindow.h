@@ -70,6 +70,7 @@ public slots:
     void showAboutDialog();
     void setFullScreen(bool);
     void toolbarActions(QAction* qAction);
+    void resetRegister();
 private:
     QToolBar* imageProcessingActions_;
     QAction* registerFaceAct_;
