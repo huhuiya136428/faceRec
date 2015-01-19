@@ -70,14 +70,14 @@ namespace fzhcore
         int i = 0;
         double t = 0;
         std::vector<cv::Rect> faces, faces2;
-        const static cv::Scalar colors[] = { CV_RGB(0, 0, 255),
-            CV_RGB(0, 128, 255),
-            CV_RGB(0, 255, 255),
-            CV_RGB(0, 255, 0),
-            CV_RGB(255, 128, 0),
-            CV_RGB(255, 255, 0),
-            CV_RGB(255, 0, 0),
-            CV_RGB(255, 0, 255) };
+        const static cv::Scalar colors[] = { cvScalar(0, 0, 255),
+            cvScalar(0, 128, 255),
+            cvScalar(0, 255, 255),
+            cvScalar(0, 255, 0),
+            cvScalar(255, 128, 0),
+            cvScalar(255, 255, 0),
+            cvScalar(255, 0, 0),
+            cvScalar(255, 0, 255) };
         cv::Mat gray, smallImg(cvRound(img.rows / scale), cvRound(img.cols / scale), CV_8UC1);
 
         cv::cvtColor(img, gray, cv::COLOR_BGR2GRAY);
