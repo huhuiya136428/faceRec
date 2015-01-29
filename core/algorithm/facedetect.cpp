@@ -16,7 +16,7 @@ namespace fzhcore
     FaceRecogniser::FaceRecogniser()
         :numCaptured_(0)
     {
-
+        model_ = cv::face::createEigenFaceRecognizer();
     }
 
     FaceRecogniser::~FaceRecogniser()
@@ -24,7 +24,7 @@ namespace fzhcore
         numCaptured_ = 0;
     }
 
-    bool FaceRecogniser::isFinished() 
+    bool FaceRecogniser::isCollectionFinished() 
     {
         bool isFinished = (numCaptured_ >= maxCaptured_);
 
@@ -149,4 +149,14 @@ namespace fzhcore
         return numCaptured_;
     }
 
+    void FaceRecogniser::train()
+    {
+        model_->train(images_, labels_);
+    }
+
+    void FaceRecogniser::addSample( cv::Mat& image, int label)
+    {
+        images_.push_back(image);
+        labels_.push_back(label);
+    }
 }

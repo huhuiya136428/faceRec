@@ -31,8 +31,11 @@
 /************************************************************************/
 
 #include "../core/algorithm/facedetect.hpp"
+#include "opencv2/face.hpp"
 
 #include "ProcessingThread.h"
+
+#include <vector>
 
 ProcessingThread::ProcessingThread(SharedImageBuffer *sharedImageBuffer, int deviceNumber) : QThread(), sharedImageBuffer(sharedImageBuffer)
 {
@@ -146,11 +149,23 @@ void ProcessingThread::run()
                   imgProcSettings.cannyThreshold1, imgProcSettings.cannyThreshold2,
                   imgProcSettings.cannyApertureSize, imgProcSettings.cannyL2gradient);
         }
-        static fzhcore::FaceRecogniser faceRec;
+      
         bool found = false;
-        if (imgProcFlags.faceRegisterOn)
+
+        if (imgProcFlags.faceCollectioneOn)
         {   
-            found = faceRec.detectAndDraw(currentFrame);      
+            found = personRecognitionManager_.detectFace(currentFrame);
+            
+            if (found)
+            {
+                
+            }
+           
+        }
+
+        if (imgProcFlags.faceTrainingOn && personRecognitionManager_.isCollectionFinished())
+        {
+            personRecognitionManager_.train();            
         }
         ////////////////////////////////////
         // PERFORM IMAGE PROCESSING ABOVE //
@@ -164,9 +179,9 @@ void ProcessingThread::run()
         emit newFrame(frame);
 
         if (found)
-            emit foundFace(100 * faceRec.getNumCapture() / faceRec.maxCaptured_);
+            emit foundFace(100 * personRecognitionManager_.getNumCapture() / MAX_CAPTURE);
 
-        if (faceRec.isFinished())
+        if (personRecognitionManager_.isCollectionFinished())
             emit finishRegister();
 
         // Update statistics
@@ -223,8 +238,9 @@ void ProcessingThread::updateImageProcessingFlags(struct ImageProcessingFlags im
     this->imgProcFlags.erodeOn=imgProcFlags.erodeOn;
     this->imgProcFlags.flipOn=imgProcFlags.flipOn;
     this->imgProcFlags.cannyOn=imgProcFlags.cannyOn;
-    this->imgProcFlags.faceRegisterOn = imgProcFlags.faceRegisterOn;
+    this->imgProcFlags.faceTrainingOn = imgProcFlags.faceTrainingOn;
     this->imgProcFlags.showListOn = imgProcFlags.showListOn;
+    this->imgProcFlags.faceCollectioneOn = imgProcFlags.faceCollectioneOn;
 }
 
 void ProcessingThread::updateImageProcessingSettings(struct ImageProcessingSettings imgProcSettings)

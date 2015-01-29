@@ -1,8 +1,11 @@
+#pragma once
+
+
 #include "opencv2/core/utility.hpp"
 
 
 #include <string>
-
+#include <map>
 
 namespace fzhcore
 {
@@ -12,8 +15,7 @@ namespace fzhcore
         DataSet();
         virtual ~DataSet();
 
-        virtual bool getData() = 0;
-        virtual bool setData() = 0;        
+      
 
 
     };
@@ -22,16 +24,27 @@ namespace fzhcore
     {
     public:
         Person();
+        Person(std::string name, int label);
         virtual ~Person();
                 
-    
-    private:
         
     private:
         std::string name_;
-        std::int label_;
-
-       
+        int label_;       
     };
-   
+
+    class PersonList : public DataSet
+    {
+    public:
+        PersonList();
+        virtual ~PersonList();
+
+        void addPerson(std::string name, int label);
+        void removePerson(int label);        
+        Person getPerson(int label);
+       
+    private:
+        std::map<int, Person> persons_;
+
+    };
 }

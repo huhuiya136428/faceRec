@@ -4,7 +4,9 @@ set(QT5_LIB_DIRS ${Qt5_DIR}/lib/)
 
 
 link_directories(${OpenCV_LIB_DIR}
-${QT5_LIB_DIRS})
+${QT5_LIB_DIRS}
+D:/development/projects/faceRec/build/x64/Debug
+	D:/development/projects/faceRec/build/x64/release)
 
 include_directories(.
 ../control/
@@ -24,8 +26,7 @@ set(UI_FILES
     CameraView.ui
 	ImageProcessingSettingsDialog.ui
 	MainWindow.ui
-	)
-	
+	)	
 
 
 set(SOURCE_FILES
@@ -65,7 +66,7 @@ set(ICONS
 add_executable(frontend
     ${INCLUDE_FILES} ${SOURCE_FILES} ${UI_FILES} ${ICONS})
 	
-target_link_libraries(frontend libopentld cvblobs config++ control algorithm Qt5::Core Qt5::Widgets Qt5::Gui ${OpenCV_LIBS})
+target_link_libraries(frontend libopentld cvblobs config++ control dataset algorithm Qt5::Core Qt5::Widgets Qt5::Gui ${OpenCV_LIBS})
 
 #install(TARGETS faceRec DESTINATION bin)
 

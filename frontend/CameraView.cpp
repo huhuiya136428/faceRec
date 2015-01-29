@@ -64,8 +64,10 @@ CameraView::CameraView(QWidget *parent, int deviceNumber, SharedImageBuffer *sha
     imageProcessingFlags.erodeOn=false;
     imageProcessingFlags.flipOn=false;
     imageProcessingFlags.cannyOn=false;
-    imageProcessingFlags.faceRegisterOn = false;
+    imageProcessingFlags.faceTrainingOn = false;
     imageProcessingFlags.showListOn = false;
+    imageProcessingFlags.faceCollectioneOn = false;
+
     // Connect signals/slots
     connect(ui->frameLabel, SIGNAL(onMouseMoveEvent()), this, SLOT(updateMouseCursorPosLabel()));
     connect(ui->clearImageBufferButton, SIGNAL(released()), this, SLOT(clearImageBuffer()));
@@ -382,7 +384,7 @@ void CameraView::handleContextMenuAction(QAction *action)
     }
     else if (action->text() == "Reg")
     {
-        imageProcessingFlags.faceRegisterOn = action->isChecked();
+        imageProcessingFlags.faceCollectioneOn = action->isChecked();
         emit newImageProcessingFlags(imageProcessingFlags);
     }
     else if (action->text() == "List")
@@ -396,7 +398,7 @@ void CameraView::handleContextMenuAction(QAction *action)
 
 void CameraView::updateProgressBar(int sizeT)
 {
-    if (imageProcessingFlags.faceRegisterOn)
+    if (imageProcessingFlags.faceCollectioneOn)
     {
         ui->progressBar->setValue(sizeT);
     }    
@@ -406,7 +408,7 @@ void CameraView::finishRegistration()
 {
     ui->progressBar->setValue(0);
 
-    imageProcessingFlags.faceRegisterOn = false;
+    imageProcessingFlags.faceCollectioneOn = false;
     emit newImageProcessingFlags(imageProcessingFlags);
     emit RegistrationFinished();
 }

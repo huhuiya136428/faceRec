@@ -58,10 +58,11 @@ struct ImageProcessingFlags{
     bool erodeOn;
     bool flipOn;
     bool cannyOn;
-    bool faceRegisterOn;
+    bool faceTrainingOn;
     bool showListOn;
+    bool faceCollectioneOn;
    
-    ImageProcessingFlags():faceRegisterOn(false), showListOn(false)
+    ImageProcessingFlags() :faceTrainingOn(false), faceCollectioneOn(false), showListOn(false)
     {
 
     };

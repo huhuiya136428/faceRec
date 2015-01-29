@@ -31,6 +31,8 @@ add_library(control
 	SharedImageBuffer.cpp
 	SharedImageBuffer.h
 	Structures.h
+	PersonRecognitionManager.hpp
+	PersonRecognitionManager.cpp
    )
 
 target_link_libraries(control libopentld cvblobs config++ Qt5::Core Qt5::Widgets Qt5::Gui ${OpenCV_LIBS})

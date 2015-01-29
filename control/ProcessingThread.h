@@ -46,6 +46,7 @@
 #include "Buffer.h"
 #include "MatToQImage.h"
 #include "SharedImageBuffer.h"
+#include "PersonRecognitionManager.hpp"
 
 using namespace cv;
 
@@ -83,6 +84,7 @@ class ProcessingThread : public QThread
         int deviceNumber;
         bool enableFrameProcessing;
 
+        fzhcore::PersonRecognitionManager personRecognitionManager_;
     protected:
         void run();
 
